@@ -7,6 +7,9 @@ function sum_to_n_b(n) {
     .reduce((result, currentValue) => currentValue + result, 0);
 }
 
+/** 
+ * The worst way. This way will return "Maximum call stack size exceeded" when n is too large
+*/
 function sum_to_n_c(n) {
   if (n === 0) return 0;
   return n + sum_to_n_c(n - 1);
