@@ -65,7 +65,7 @@ const TokenService = {
     from: string,
     to: string,
     amount: number
-  ): Promise<number> => {
+  ): Promise<{ result: number; rate: number }> => {
     const res = await axios.get("https://interview.switcheo.com/prices.json");
     await delay(1000);
     // Create currency map
@@ -74,7 +74,9 @@ const TokenService = {
       ({ currency, price }: IToken) => (currencyMap[currency] = price)
     );
 
-    return (currencyMap[from] / currencyMap[to]) * amount;
+    const rate = currencyMap[from] / currencyMap[to];
+
+    return { rate: rate, result: rate * amount };
   },
 };
 

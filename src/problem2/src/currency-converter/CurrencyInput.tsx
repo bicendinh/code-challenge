@@ -1,4 +1,4 @@
-import { Flex, Input, Select } from "antd";
+import { Flex, Input, Select, Tooltip } from "antd";
 import { ChangeEvent, useState } from "react";
 import { createUseStyles } from "react-jss";
 import CurrencyOption from "./CurrencyOption";
@@ -7,19 +7,6 @@ import Paragraph from "antd/es/typography/Paragraph";
 import { IToken } from "../types";
 
 const useStyles = createUseStyles({
-  container: {
-    maxWidth: 500,
-    margin: "0 auto",
-    padding: "2rem",
-    background: "#f9f9f9",
-    borderRadius: 10,
-    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-  },
-  tokenIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-  },
   inputWrap: {
     borderRadius: 12,
     cursor: "pointer",
@@ -42,11 +29,16 @@ const useStyles = createUseStyles({
         border: "2px solid #f0b90b",
       },
     },
+    "&.isLoading": {
+      opacity: 0.8,
+      pointerEvents: "none",
+    },
   },
   inputHeader: {
     marginBottom: 16,
     textAlign: "left",
     fontSize: 16,
+    fontWeight: 500,
   },
   inputBox: {
     flex: "1 1",
@@ -87,6 +79,7 @@ interface CurrencyInputProps {
   tokens: IToken[];
   tokensMap: { [key: string]: IToken };
   title: string;
+  loading: boolean;
 }
 
 const CurrencyInput: React.FC<CurrencyInputProps> = ({
@@ -97,6 +90,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   tokens,
   tokensMap,
   title,
+  loading,
 }) => {
   const classes = useStyles();
   const [isFocused, setFocused] = useState(false);
@@ -105,23 +99,26 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
     <div
       className={classNames(classes.inputWrap, {
         focusedInput: isFocused,
+        isLoading: loading,
       })}
     >
       <Paragraph className={classes.inputHeader}>{title}</Paragraph>
       <Flex justify="space-between">
         <Flex vertical className={classes.inputBox}>
           <Flex>
-            <Input
-              className={classes.inputValue}
-              value={value}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                const value = Number.parseFloat(event.currentTarget.value);
-                if (isNaN(value)) return setValue(0);
-                setValue(value);
-              }}
-              onBlur={() => setFocused(false)}
-              onFocus={() => setFocused(true)}
-            />
+            <Tooltip title={"Enter amount ..."}>
+              <Input
+                className={classes.inputValue}
+                value={value}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  const value = Number.parseFloat(event.currentTarget.value);
+                  if (isNaN(value)) return setValue(0);
+                  setValue(value);
+                }}
+                onBlur={() => setFocused(false)}
+                onFocus={() => setFocused(true)}
+              />
+            </Tooltip>
           </Flex>
           <Flex>
             <Paragraph className={classes.estimateAmount}>
