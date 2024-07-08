@@ -48,7 +48,7 @@ const WalletPage: React.FC<Props> = (props: Props) => {
 
   /**
    * @description Separate this 'useMemo' into two 'useMemo' hooks: one for sorting and one for filtering.
-   *              -> It can improve readability and enhance performance.
+   * It can improve readability and enhance performance.
    */
   const sortedBalances = useMemo(() => {
     return balances
@@ -82,7 +82,7 @@ const WalletPage: React.FC<Props> = (props: Props) => {
         }
       });
     /**
-     * @description This 'useMemo' does not depend on the 'prices' variable. Remove the 'prices' variable from the dependency
+     * @description This 'useMemo' does not depend on the 'prices' variable. Remove the 'prices' variable from the dependency list below
      */
   }, [balances, prices]);
 
